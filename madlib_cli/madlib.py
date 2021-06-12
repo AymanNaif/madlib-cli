@@ -20,33 +20,30 @@ def user_input():
     return user_answer
 
 
-# user_input()
-# user_list_answer = user_input()  # list of user answer
-
-
-def read_template():
-
-    with open('./assets/script.txt') as file:
-        file_content = file.read()
-    return file_content
-
-
-file_contents = read_template()  # file content as a string
+def read_template(path):
+    try:
+        with open(path) as file:
+            file_content = file.read()
+        return file_content
+    except FileNotFoundError:
+        raise FileNotFoundError('ERORR:: file not found')
 
 
 def parse_template(texts):
-    list_template = re.findall("{[^]+}", texts)
-    str_template = re.sub("{[^]+}", texts)
+    str_template = re.sub('{[^}]+}', '{}', texts)
+    list_template = tuple(re.findall("{(.*?)}", texts))
     return str_template, list_template
 
 
-str_and_list = parse_template(file_contents)
-print(str_and_list)
+def merge(blank, full_text):
+    return blank.format(*full_text)
 
 
-def merge(template, lst):
-    pass
-
-
-def write_template():
-    pass
+# if __name__ == "__main__":
+#     welcome()
+#     user_answerss = user_input()
+#     file_content = read_template('./assets/script.txt')
+#     print(file_content)
+#     blanks = parse_template(file_content)
+#     print(blanks)
+#     merge(blanks, user_answerss)
